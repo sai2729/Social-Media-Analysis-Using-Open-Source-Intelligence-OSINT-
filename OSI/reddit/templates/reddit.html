@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
+
+    {% load static %}  
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+  </head>
+  <body>
+    
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Open Source Intelligence</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+</header>
+<body>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <body>
+    <div id="graphs" style="margin-top:40px" class="row">
+        <div class="col col-lg-6" id="myPlot" ></div>
+        <div class="col col-lg-6" id="piePlot" ></div>
+        <img id="barchart" style="display:none;width:140px;height:140px;margin-right:20px;">
+        <div style="display:none" class="col col-lg-6" id="piechart" ></div>
+    </div>
+    <!-- <h1 align="center"  >Attacks on reddit Platform in recent years</h1> -->
+    
+    <script>
+        const attacksList = [];
+        const attacksCountList = []
+
+        {% for key,val in attacks.items%}
+            attacksList.push('{{key}}')
+            attacksCountList.push('{{val}}')
+        {% endfor %}
+
+        var totalAttacksCount = 0;
+        for (let i = 0; i < attacksList.length; i += 1) {
+            totalAttacksCount += attacksCountList[i]
+        }
+        const attacksPercentList = [];
+        for (let i = 0; i < attacksList.length; i += 1) {
+            attacksPercentList.push(attacksCountList[i]/totalAttacksCount)
+        }
+
+        const data = [{
+        x:attacksList,
+        y:attacksCountList,
+        type:"bar"
+        },
+        ];
+
+        const pieData = [
+            {
+                labels: attacksList,
+                values: attacksPercentList,
+                type: "pie",
+                hole: 0.4,
+                marker: {
+                colors: [
+                    '#FFA07A',
+                    '#FA8072',
+                    '#E9967A',
+                    '#F08080',
+                    '#CD5C5C',
+                    '#DC143C',
+                    '#FF6347',
+                    '#FF4500',
+                ]
+                },
+                texttemplate: "%{label}: %{percent}%",
+                textposition: "inside",
+                automargin: true
+            }
+        ]
+        
+        const layout = {
+        title: {
+            text: "Attacks on Reddit platform in recent years",
+            font: {
+            family: "Arial",
+            size: 35,
+            }
+        }
+        };
+
+        const pieLayout = {
+            height: 600,
+            width: 800,
+            grid: {
+                rows: 1,
+                columns: 1,
+                pattern: 'independent'
+            },
+            margin: {
+                l: 0,
+                r: 0,
+                b: 0,
+                t: 0
+            },
+            legend: {
+                x: 0.5,
+                y: -0.1,
+                orientation: "h",
+                font: {
+                family: "Arial",
+                size: 18,
+                },
+                traceorder: "normal"
+            }
+        }
+
+        function getEachAttackVis(attackType){
+            pieimg = 'charts/piecharts/'+attackType+'.png'
+            barimg = 'charts/barchart/'+attackType+'.png'
+            document.getElementById("myPlot").style.display="none"
+            document.getElementById("piePlot").style.display="none"
+
+            var img = document.getElementById("barchart")
+            img.src = "{% static 'charts/barchart/barchart_Hacking.png' %}"
+            img.style.display = "block"
+            document.getElementById("piechart").style.display="block"
+
+        }
+        
+        Plotly.newPlot("myPlot", data, layout);
+        Plotly.newPlot("piePlot",pieData,pieLayout)
+    </script>
+
+    <div class="center" style="margin-top:50px;text-align-last: center;font-family: monospace;">
+    <p style="font-size: 20px;"> For more information on the attacks that occured in Reddit platform, select any of the below button</p>
+    <div>
+        <button onclick="getEachAttackVis('cyber attack')" class="btn btn-success" type="button">Cyber Attacks</button>
+        <button onclick="getEachAttackVis('Ransomware')" class="btn btn-success" type="button">ransomware</button>
+        <button onclick="getEachAttackVis('Data breach')" class="btn btn-success" type="button">Data Breach</button>
+        <button onclick="getEachAttackVis('Hacking')" class="btn btn-success" type="button">Hacking</button>
+        <button onclick="getEachAttackVis('Phishing')" class="btn btn-success" type="button">Phishing</button>
+        <button onclick="getEachAttackVis('Cyber crime')" class="btn btn-success" type="button">Cyber Crime</button>
+        <button onclick="getEachAttackVis('DDoS attacks')" class="btn btn-success" type="button">DDoS Attacks</button>
+        <button onclick="getEachAttackVis('Network Security')" class="btn btn-success" type="button">Network Security</button>
+    </div>
+    </div>
+
+  </body>
+</html>
