@@ -51,6 +51,13 @@ We provide detailed visualizations, such as bar charts, which show:
  - Geographical distribution of users.
  - Identified cybersecurity threats on different platforms.
 
+## Screenshots
+### Dashboard
+![Dashboard Screenshot](1.png)
+
+### Threat Analysis
+![Threat Analysis Visualization Screenshot](2.png)
+
 ## Future Enhancements
 - Extend support for more social media platforms.
 - Improve threat analysis using advanced machine learning models.
