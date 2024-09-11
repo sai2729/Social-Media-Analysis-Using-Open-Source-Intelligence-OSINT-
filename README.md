@@ -35,3 +35,23 @@ This project focuses on analyzing publicly available data from social media plat
    ```
 4. Access the Application:
    Open a browser and go to http://127.0.0.1:8000.
+
+## How it Works
+1. The user selects a social media platform (Reddit, Facebook, Instagram, or LinkedIn).
+2. The system scrapes publicly available data from these platforms using APIs or web scraping techniques.
+3. The data is processed, analyzed, and visualized using tools such as Pandas and Matplotlib.
+4. The user can view results in three main categories:
+   - Threat Analysis: View cybersecurity threats faced by the platform.
+   - User Distribution: See the geographical distribution of users.
+   - Trending Topics: Discover current trends and topics being discussed on the platform.
+
+## Results
+We provide detailed visualizations, such as bar charts, which show:
+ - Number of posts by day of the week (Reddit example).
+ - Geographical distribution of users.
+ - Identified cybersecurity threats on different platforms.
+
+## Future Enhancements
+- Extend support for more social media platforms.
+- Improve threat analysis using advanced machine learning models.
+- Automate trend detection with real-time data.
